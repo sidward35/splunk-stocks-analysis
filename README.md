@@ -7,10 +7,10 @@ Download the latest version of the app [here](https://github.com/sidward35/splun
 - Each event contains information for an individual symbol
 
 ## Search Syntax: `|quote {symbol}`
-`{symbol}` = any stock market symbol 
+`{symbol}` = any stock market symbol
+- Multiple arguments can be given
 - Arguments are optional
   - If no value for `{symbol}` is given, 10 default symbols will be used: SPLK, TSLA, AMZN, NFLX, MSFT, NVDA, INTC, PYPL, VMW, NET
-- Multiple arguments can be given
 
 ## Usage Examples
 - `|quote` returns stock info for the default symbols as noted above
