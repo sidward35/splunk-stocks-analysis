@@ -1,0 +1,85 @@
+<form theme="dark">
+  <label>Stocks</label>
+  <fieldset submitButton="false"></fieldset>
+  <row>
+    <panel>
+      <title>Stocks Summary</title>
+      <table>
+        <search>
+          <query>| quote
+| spath
+| table ticker quote.c quote.pc technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsScore sentiment.buzz.buzz sentiment.sentiment.bullishPercent sentiment.sectorAverageBullishPercent
+| sort - sentiment.sentiment.bullishPercent sentiment.companyNewsScore sentiment.buzz.articlesInLastWeek +ticker
+| rename quote.c as close, quote.pc as previousClose, technicalAnalysis.signal as signal, sentiment.buzz.articlesInLastWeek as articlesInLastWeek, sentiment.buzz.weeklyAverage as weeklyAverage, sentiment.companyNewsScore as companyNewsScore, sentiment.sectorAverageNewsScore as sectorAverageNewsScore, sentiment.buzz.buzz as buzz, sentiment.sentiment.bullishPercent as bullishPercent, sentiment.sectorAverageBullishPercent as sectorAverageBullishPercent</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">row</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <drilldown>
+          <set token="ticker">$click.value$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+  <row>
+    <panel>
+      <title>Search</title>
+      <input type="text" token="ticker" searchWhenChanged="true">
+        <label>Symbol(s)</label>
+        <default>TSLA</default>
+      </input>
+      <event>
+        <search>
+          <query>| quote $ticker$</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">20</option>
+        <option name="list.drilldown">none</option>
+        <option name="list.wrap">1</option>
+        <option name="maxLines">5</option>
+        <option name="raw.drilldown">full</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">0</option>
+        <option name="table.drilldown">all</option>
+        <option name="table.sortDirection">asc</option>
+        <option name="table.wrap">1</option>
+        <option name="type">list</option>
+      </event>
+    </panel>
+    <panel>
+      <title>ETF Ratings</title>
+      <table>
+        <search>
+          <query>| quote QQQ TQQQ VGT VYM SPHD
+| spath
+| table ticker, quote.c, technicalAnalysis.signal
+| sort ticker
+| rename quote.c as close, technicalAnalysis.signal as signal</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">row</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <drilldown>
+          <set token="ticker">$click.value$</set>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</form>
