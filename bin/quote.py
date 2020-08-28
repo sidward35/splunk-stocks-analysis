@@ -29,7 +29,7 @@ def get_basic_info(stock):
 		quote_json = json.loads(str(quote.json()).replace('\'','"').replace('None','"None"').replace('True','"True"').replace('False','"False"'))
 		output['quote'] = quote_json
 
-		fins = requests.get('https://finnhub.io/api/v1/stock/metric?symbol='+ticker+'&metric=all&token=brqivm7rh5rc4v2pmq8g')
+		fins = requests.get('https://finnhub.io/api/v1/stock/metric?symbol='+ticker+'&metric=all&token=bt4oq4f48v6um6kgq5gg')
 		fins_json = json.loads(str(fins.json()).replace('\'','"').replace('None','"None"').replace('True','"True"').replace('False','"False"'))
 		fins_json = fins_json["metric"]
 		output['financials'] = fins_json
@@ -39,7 +39,7 @@ def get_basic_info(stock):
 		aggr_json = aggr_json["technicalAnalysis"]
 		output['technicalAnalysis'] = aggr_json
 
-		senti = requests.get('https://finnhub.io/api/v1/news-sentiment?symbol='+ticker+'&token=brqivm7rh5rc4v2pmq8g')
+		senti = requests.get('https://finnhub.io/api/v1/news-sentiment?symbol='+ticker+'&token=bt4oq4f48v6um6kgq5gg')
 		senti_json = json.loads(str(senti.json()).replace('\'','"').replace('None','"None"').replace('True','"True"').replace('False','"False"'))
 		output['sentiment'] = senti_json
 
