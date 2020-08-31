@@ -5,14 +5,15 @@
     <panel>
       <title>Stocks Summary</title>
       <table>
-        <title>Sorted by bullishPercent, newsScore, articlesLastWeek, and change</title>
+        <title>Sorted by signal, bullishPercent, newsScore, articlesLastWeek, and change</title>
         <search>
           <query>| quote
 | spath
 | convert num(quote.c), num(quote.pc)
-| eval change = ('quote.c'/'quote.pc'-1)*100
-| table ticker change quote.c quote.pc technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsScore sentiment.buzz.buzz sentiment.sentiment.bullishPercent sentiment.sectorAverageBullishPercent
-| sort - sentiment.sentiment.bullishPercent sentiment.companyNewsScore sentiment.buzz.articlesInLastWeek change
+| eval change = ('quote.c'/'quote.pc'-1)*100, signalRating = case('technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' = "strong sell", 1, true(), 0)
+| table ticker change quote.c quote.pc signalRating technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsScore sentiment.buzz.buzz sentiment.sentiment.bullishPercent sentiment.sectorAverageBullishPercent
+| sort - signalRating sentiment.sentiment.bullishPercent sentiment.companyNewsScore sentiment.buzz.articlesInLastWeek +change
+| fields - signalRating
 | rename quote.c as close, quote.pc as prevClose, technicalAnalysis.signal as signal, sentiment.buzz.articlesInLastWeek as articlesLastWeek, sentiment.buzz.weeklyAverage as weeklyAverage, sentiment.companyNewsScore as newsScore, sentiment.sectorAverageNewsScore as sectorAvgNewsScore, sentiment.buzz.buzz as buzz, sentiment.sentiment.bullishPercent as bullishPercent, sentiment.sectorAverageBullishPercent as sectorAvgBullishPercent</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
@@ -69,12 +70,16 @@
     <panel>
       <title>ETF Ratings</title>
       <table>
+        <title>Sorted by signal and change</title>
         <search>
           <query>| quote QQQ TQQQ VGT VYM SPHD
 | spath
-| table ticker, quote.c, technicalAnalysis.signal
-| sort ticker
-| rename quote.c as close, technicalAnalysis.signal as signal</query>
+| convert num(quote.c), num(quote.pc)
+| eval change = ('quote.c'/'quote.pc'-1)*100, signalRating = case('technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' = "strong sell", 1, true(), 0)
+| table ticker change quote.c quote.pc signalRating technicalAnalysis.signal
+| sort - signalRating +change
+| fields - signalRating
+| rename quote.c as close, quote.pc as prevClose, technicalAnalysis.signal as signal</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -86,6 +91,13 @@
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
+        <format type="color" field="change">
+          <colorPalette type="minMidMax" maxColor="#53A051" midColor="#FFFFFF" minColor="#DC4E41"></colorPalette>
+          <scale type="minMidMax" maxValue="3.5" midValue="0" minValue="-3.5"></scale>
+        </format>
+        <format type="number" field="change">
+          <option name="unit">%</option>
+        </format>
         <drilldown>
           <set token="ticker">$click.value$</set>
         </drilldown>
