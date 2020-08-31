@@ -2,6 +2,8 @@
 ### Splunk app with custom 'quote' command that fetches stock market data from [Finnhub API](https://finnhub.io/docs/api)
 Download the latest version of the app [here](https://github.com/sidward35/splunk-stocks-analysis/releases/download/v0.6.2/splunk-stocks-analysis.spl)!
 
+![Pre-built dashboard](https://i.imgur.com/LrhC4UE.png)
+
 ## Command Behavior
 - Data will be returned in JSON format
 - Each event contains information for an individual symbol
