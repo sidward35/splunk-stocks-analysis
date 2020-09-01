@@ -28,7 +28,7 @@
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
         <format type="color" field="change">
-          <colorPalette type="minMidMax" maxColor="#53A051" midColor="#FFFFFF" minColor="#DC4E41"></colorPalette>
+          <colorPalette type="minMidMax" maxColor="#53A051" midColor="#3C444D" minColor="#DC4E41"></colorPalette>
           <scale type="minMidMax" maxValue="3.5" midValue="0" minValue="-3.5"></scale>
         </format>
         <format type="number" field="change">
@@ -92,7 +92,7 @@
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
         <format type="color" field="change">
-          <colorPalette type="minMidMax" maxColor="#53A051" midColor="#FFFFFF" minColor="#DC4E41"></colorPalette>
+          <colorPalette type="minMidMax" maxColor="#53A051" midColor="#3C444D" minColor="#DC4E41"></colorPalette>
           <scale type="minMidMax" maxValue="3.5" midValue="0" minValue="-3.5"></scale>
         </format>
         <format type="number" field="change">
