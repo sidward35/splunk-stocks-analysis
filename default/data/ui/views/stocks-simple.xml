@@ -3,7 +3,7 @@
   <fieldset submitButton="false">
     <input type="text" token="ticker" searchWhenChanged="true">
       <label>Symbol(s)</label>
-      <default></default>
+      <default>DJIA</default>
     </input>
   </fieldset>
   <row>
@@ -14,6 +14,7 @@
         <search>
           <query>| quote $ticker$
 | spath
+| dedup ticker
 | convert num(quote.c), num(quote.pc), num(sentiment.sentiment.bullishPercent), num(sentiment.sectorAverageBullishPercent)
 | eval change = ('quote.c'/'quote.pc'-1)*100, bullishPercent = 'sentiment.sentiment.bullishPercent'*100, sectorAvgBullishPercent = 'sentiment.sectorAverageBullishPercent'*100, signalRating = case('technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' = "strong sell", 1, true(), 0)
 | table ticker change quote.c quote.pc signalRating technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsScore sentiment.buzz.buzz bullishPercent sectorAvgBullishPercent

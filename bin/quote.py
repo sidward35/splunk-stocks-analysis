@@ -16,7 +16,7 @@ def export_json(content):
 	results.append(row)
 
 def get_basic_info(stock):
-	if(stock==''):
+	if(stock=='' or stock=='default'):
 		tickers = ['SPLK', 'TSLA', 'AMZN', 'NFLX', 'MSFT', 'NVDA', 'INTC', 'PYPL', 'VMW', 'NET']
 	elif(stock=='DJIA'):
 		tickers = ['JPM', 'IBM', 'UNH', 'PG', 'BA', 'VZ', 'GS', 'INTC', 'HD', 'MCD', 'CSCO', 'V', 'MSFT', 'KO', 'AXP', 'AMGN', 'MRK', 'CVX', 'MMM', 'TRV', 'JNJ', 'DIS', 'HON', 'CAT', 'NKE', 'CRM', 'WBA', 'AAPL', 'DOW', 'WMT']

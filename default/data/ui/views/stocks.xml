@@ -9,12 +9,13 @@
         <search>
           <query>| quote
 | spath
-| convert num(quote.c), num(quote.pc)
-| eval change = ('quote.c'/'quote.pc'-1)*100, signalRating = case('technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' = "strong sell", 1, true(), 0)
-| table ticker change quote.c quote.pc signalRating technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsScore sentiment.buzz.buzz sentiment.sentiment.bullishPercent sentiment.sectorAverageBullishPercent
+| dedup ticker
+| convert num(quote.c), num(quote.pc), num(sentiment.sentiment.bullishPercent), num(sentiment.sectorAverageBullishPercent)
+| eval change = ('quote.c'/'quote.pc'-1)*100, bullishPercent = 'sentiment.sentiment.bullishPercent'*100, sectorAvgBullishPercent = 'sentiment.sectorAverageBullishPercent'*100, signalRating = case('technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' = "strong sell", 1, true(), 0)
+| table ticker change quote.c quote.pc signalRating technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsScore sentiment.buzz.buzz bullishPercent sectorAvgBullishPercent
 | sort - signalRating sentiment.sentiment.bullishPercent sentiment.companyNewsScore sentiment.buzz.articlesInLastWeek +change
 | fields - signalRating
-| rename quote.c as close, quote.pc as prevClose, technicalAnalysis.signal as signal, sentiment.buzz.articlesInLastWeek as articlesLastWeek, sentiment.buzz.weeklyAverage as weeklyAverage, sentiment.companyNewsScore as newsScore, sentiment.sectorAverageNewsScore as sectorAvgNewsScore, sentiment.buzz.buzz as buzz, sentiment.sentiment.bullishPercent as bullishPercent, sentiment.sectorAverageBullishPercent as sectorAvgBullishPercent</query>
+| rename quote.c as close, quote.pc as prevClose, technicalAnalysis.signal as signal, sentiment.buzz.articlesInLastWeek as articlesLastWeek, sentiment.buzz.weeklyAverage as weeklyAverage, sentiment.companyNewsScore as newsScore, sentiment.sectorAverageNewsScore as sectorAvgNewsScore, sentiment.buzz.buzz as buzz</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
@@ -27,6 +28,7 @@
         <option name="rowNumbers">false</option>
         <option name="totalsRow">false</option>
         <option name="wrap">true</option>
+        <option name="refresh.auto.interval">60</option>
         <format type="color" field="change">
           <colorPalette type="minMidMax" maxColor="#53A051" midColor="#3C444D" minColor="#DC4E41"></colorPalette>
           <scale type="minMidMax" maxValue="3.5" midValue="0" minValue="-3.5"></scale>
@@ -34,8 +36,31 @@
         <format type="number" field="change">
           <option name="unit">%</option>
         </format>
+        <format type="number" field="bullishPercent">
+          <option name="precision">0</option>
+          <option name="unit">%</option>
+        </format>
+        <format type="number" field="sectorAvgBullishPercent">
+          <option name="precision">0</option>
+          <option name="unit">%</option>
+        </format>
+        <format type="color" field="bullishPercent">
+          <colorPalette type="minMidMax" maxColor="#006D9C" midColor="#3C444D" minColor="#EC9960"></colorPalette>
+          <scale type="minMidMax" maxValue="100" midValue="50" minValue="0"></scale>
+        </format>
+        <format type="color" field="newsScore">
+          <colorPalette type="minMidMax" maxColor="#294E70" minColor="#3C444D"></colorPalette>
+          <scale type="minMidMax" maxValue="1" minValue="0"></scale>
+        </format>
+        <format type="color" field="articlesLastWeek">
+          <colorPalette type="minMidMax" maxColor="#5A4575" minColor="#3C444D"></colorPalette>
+          <scale type="minMidMax"></scale>
+        </format>
+        <format type="color" field="signal">
+          <colorPalette type="map">{"strong buy":#53A051,"buy":#B6C75A,"neutral":#3C444D,"sell":#AF575A,"strong sell":#DC4E41}</colorPalette>
+        </format>
         <drilldown>
-          <set token="ticker">$click.value$</set>
+          <link target="_blank">https://www.investopedia.com/markets/quote?tvwidgetsymbol=$click.value$</link>
         </drilldown>
       </table>
     </panel>
@@ -98,8 +123,11 @@
         <format type="number" field="change">
           <option name="unit">%</option>
         </format>
+        <format type="color" field="signal">
+          <colorPalette type="map">{"strong buy":#53A051,"buy":#B6C75A,"neutral":#3C444D,"sell":#AF575A,"strong sell":#DC4E41}</colorPalette>
+        </format>
         <drilldown>
-          <set token="ticker">$click.value$</set>
+          <link target="_blank">https://www.investopedia.com/markets/quote?tvwidgetsymbol=$click.value$</link>
         </drilldown>
       </table>
     </panel>
