@@ -1,5 +1,5 @@
 <form theme="dark" refresh="60">
-  <label>Stocks - Simple</label>
+  <label>Symbol Search</label>
   <fieldset submitButton="false">
     <input type="text" token="ticker" searchWhenChanged="true">
       <label>Symbol(s)</label>

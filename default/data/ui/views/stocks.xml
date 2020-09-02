@@ -1,5 +1,5 @@
 <form theme="dark">
-  <label>Stocks</label>
+  <label>Stocks Overview</label>
   <fieldset submitButton="false"></fieldset>
   <row>
     <panel>
