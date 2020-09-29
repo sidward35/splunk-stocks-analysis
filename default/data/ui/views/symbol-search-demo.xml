@@ -1,0 +1,77 @@
+<form theme="dark" refresh="60" hideEdit="true" hideSplunkBar="true">
+  <label>Symbol Search</label>
+  <fieldset submitButton="false">
+    <input type="text" token="ticker" searchWhenChanged="true">
+      <label>Symbol(s)</label>
+      <default>DJIA</default>
+    </input>
+  </fieldset>
+  <row>
+    <panel depends="$ticker$">
+      <title>$ticker$ Summary</title>
+      <table>
+        <title>Sorted by signal, bullishPercent, newsScore, articlesLastWeek, and change</title>
+        <search>
+          <query>| quote $ticker$
+| spath
+| dedup ticker
+| convert num(quote.c), num(quote.pc), num(sentiment.sentiment.bullishPercent), num(sentiment.sectorAverageBullishPercent)
+| eval change = ('quote.c'/'quote.pc'-1)*100, bullishPercent = 'sentiment.sentiment.bullishPercent'*100, sectorAvgBullishPercent = 'sentiment.sectorAverageBullishPercent'*100, signalRating = case(
+'technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' =
+ "strong sell", 1, true(), 0)
+| table ticker change quote.c quote.pc signalRating technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsSc
+ore sentiment.buzz.buzz bullishPercent sectorAvgBullishPercent
+| sort - signalRating bullishPercent sentiment.companyNewsScore sentiment.buzz.articlesInLastWeek +change
+| fields - signalRating
+| rename quote.c as close, quote.pc as prevClose, technicalAnalysis.signal as signal, sentiment.buzz.articlesInLastWeek as articlesLastWeek, sentiment.buzz.weeklyAverage as weeklyAverage, sentimen
+t.companyNewsScore as newsScore, sentiment.sectorAverageNewsScore as sectorAvgNewsScore, sentiment.buzz.buzz as buzz</query>
+          <earliest>-24h@h</earliest>
+          <latest>now</latest>
+          <sampleRatio>1</sampleRatio>
+        </search>
+        <option name="count">30</option>
+        <option name="dataOverlayMode">none</option>
+        <option name="drilldown">row</option>
+        <option name="percentagesRow">false</option>
+        <option name="refresh.display">progressbar</option>
+        <option name="rowNumbers">false</option>
+        <option name="totalsRow">false</option>
+        <option name="wrap">true</option>
+        <option name="link.visible">false</option>
+        <format type="color" field="change">
+          <colorPalette type="minMidMax" maxColor="#53A051" midColor="#3C444D" minColor="#DC4E41"></colorPalette>
+          <scale type="minMidMax" maxValue="3.5" midValue="0" minValue="-3.5"></scale>
+        </format>
+        <format type="number" field="change">
+          <option name="unit">%</option>
+        </format>
+        <format type="number" field="bullishPercent">
+          <option name="precision">0</option>
+          <option name="unit">%</option>
+        </format>
+        <format type="number" field="sectorAvgBullishPercent">
+          <option name="precision">0</option>
+          <option name="unit">%</option>
+        </format>
+        <format type="color" field="bullishPercent">
+          <colorPalette type="minMidMax" maxColor="#006D9C" midColor="#3C444D" minColor="#EC9960"></colorPalette>
+          <scale type="minMidMax" maxValue="100" midValue="50" minValue="0"></scale>
+        </format>
+        <format type="color" field="newsScore">
+          <colorPalette type="minMidMax" maxColor="#294E70" minColor="#3C444D"></colorPalette>
+          <scale type="minMidMax" maxValue="1" minValue="0"></scale>
+        </format>
+        <format type="color" field="articlesLastWeek">
+          <colorPalette type="minMidMax" maxColor="#5A4575" minColor="#3C444D"></colorPalette>
+          <scale type="minMidMax"></scale>
+        </format>
+        <format type="color" field="signal">
+          <colorPalette type="map">{"strong buy":#53A051,"buy":#B6C75A,"neutral":#3C444D,"sell":#AF575A,"strong sell":#DC4E41}</colorPalette>
+        </format>
+        <drilldown>
+          <link target="_blank">https://www.investopedia.com/markets/quote?tvwidgetsymbol=$click.value$</link>
+        </drilldown>
+      </table>
+    </panel>
+  </row>
+</form>
