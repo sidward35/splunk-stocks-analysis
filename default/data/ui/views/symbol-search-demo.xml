@@ -16,15 +16,11 @@
 | spath
 | dedup ticker
 | convert num(quote.c), num(quote.pc), num(sentiment.sentiment.bullishPercent), num(sentiment.sectorAverageBullishPercent)
-| eval change = ('quote.c'/'quote.pc'-1)*100, bullishPercent = 'sentiment.sentiment.bullishPercent'*100, sectorAvgBullishPercent = 'sentiment.sectorAverageBullishPercent'*100, signalRating = case(
-'technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' =
- "strong sell", 1, true(), 0)
-| table ticker change quote.c quote.pc signalRating technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsSc
-ore sentiment.buzz.buzz bullishPercent sectorAvgBullishPercent
+| eval change = ('quote.c'/'quote.pc'-1)*100, bullishPercent = 'sentiment.sentiment.bullishPercent'*100, sectorAvgBullishPercent = 'sentiment.sectorAverageBullishPercent'*100, signalRating = case('technicalAnalysis.signal' = "strong buy", 5, 'technicalAnalysis.signal' = "buy", 4, 'technicalAnalysis.signal' = "neutral", 3, 'technicalAnalysis.signal' = "sell", 2, 'technicalAnalysis.signal' = "strong sell", 1, true(), 0)
+| table ticker change quote.c quote.pc signalRating technicalAnalysis.signal sentiment.buzz.articlesInLastWeek sentiment.buzz.weeklyAverage sentiment.companyNewsScore sentiment.sectorAverageNewsScore sentiment.buzz.buzz bullishPercent sectorAvgBullishPercent
 | sort - signalRating bullishPercent sentiment.companyNewsScore sentiment.buzz.articlesInLastWeek +change
 | fields - signalRating
-| rename quote.c as close, quote.pc as prevClose, technicalAnalysis.signal as signal, sentiment.buzz.articlesInLastWeek as articlesLastWeek, sentiment.buzz.weeklyAverage as weeklyAverage, sentimen
-t.companyNewsScore as newsScore, sentiment.sectorAverageNewsScore as sectorAvgNewsScore, sentiment.buzz.buzz as buzz</query>
+| rename quote.c as close, quote.pc as prevClose, technicalAnalysis.signal as signal, sentiment.buzz.articlesInLastWeek as articlesLastWeek, sentiment.buzz.weeklyAverage as weeklyAverage, sentiment.companyNewsScore as newsScore, sentiment.sectorAverageNewsScore as sectorAvgNewsScore, sentiment.buzz.buzz as buzz</query>
           <earliest>-24h@h</earliest>
           <latest>now</latest>
           <sampleRatio>1</sampleRatio>
