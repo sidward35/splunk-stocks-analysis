@@ -1,6 +1,6 @@
 # Splunk App for Stock Market Analysis
 ### Splunk app with custom 'quote' command that fetches stock market data from [Finnhub API](https://finnhub.io/docs/api)
-Download the latest version of the app [here](https://github.com/sidward35/splunk-stocks-analysis/releases/download/v0.7.2/splunk-stocks-analysis.spl)!
+Download the latest version of the app [here](https://github.com/sidward35/splunk-stocks-analysis/releases/download/v0.7.2/splunk-stocks-analysis.spl), or view a live demo at [splunk.smathur.tk](http://splunk.smathur.tk)!
 
 ![Pre-built dashboard](https://i.imgur.com/vQhmrwY.png)
 
