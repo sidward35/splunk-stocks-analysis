@@ -36,10 +36,12 @@ def get_basic_info(stock):
 		fins_json = fins_json["metric"]
 		output['financials'] = fins_json
 
-		aggr = requests.get('https://finnhub.io/api/v1/scan/technical-indicator?symbol='+ticker+'&resolution=D&token=bt6pumf48v6oqmgq7j1g')
-		aggr_json = json.loads(str(aggr.json()).replace('\'','"').replace('None','"None"').replace('True','"True"').replace('False','"False"'))
-		aggr_json = aggr_json["technicalAnalysis"]
-		output['technicalAnalysis'] = aggr_json
+		# The following api request has changed. See API Documentation for new implementation.  
+		#aggr = requests.get('https://finnhub.io/api/v1/scan/technical-indicator?symbol='+ticker+'&resolution=D&token=bt6pumf48v6oqmgq7j1g')
+		#aggr_json = json.loads(str(aggr.json()).replace('\'','"').replace('None','"None"').replace('True','"True"').replace('False','"False"'))
+		#aggr_json = aggr_json["technicalAnalysis"]
+		#output['technicalAnalysis'] = aggr_json
+
 		
 		# The following api request only works as a premium feature. If enabled without a paid account it breaks the QUOTE search. It went dead at 1:30AM EST 10/24/21 
 		#senti = requests.get('https://finnhub.io/api/v1/news-sentiment?symbol='+ticker+'&token=bt6pv3n48v6oqmgq7j70')
